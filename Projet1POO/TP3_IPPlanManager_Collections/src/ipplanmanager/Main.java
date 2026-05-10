@@ -4,53 +4,40 @@
  */
 package ipplanmanager;
 
-/**
- *
- * @author SKULY
- */
 public class Main {
-     public static void main(String[] args) {
- System.out.println("===== TP2 : Encapsulation =====");
- AdresseIP ip1 = new AdresseIP("192.168.1.1");
- AdresseIP ip2 = new AdresseIP("");
- InterfaceReseau interface1 = new InterfaceReseau("eth0", ip1);
- InterfaceReseau interface2 = new InterfaceReseau("", ip2);
- interface1.activer();
- Equipement routeur = new Equipement(
- "R1_EDGE",
- "Routeur",
- interface1
- );
- Equipement serveur =
- new Equipement(
- "",
- "",
- interface2
- );
- ReseauIP reseau1 =
- new ReseauIP(
- "192.168.1.0",
- 24,
- "Réseau principal"
- );
- ReseauIP reseau2 =
- new ReseauIP(
- "",
- 55,
- ""
- );
- System.out.println();
- System.out.println("----- Réseau 1 -----");
- reseau1.afficher();
- System.out.println();
- System.out.println("----- Réseau 2 -----");
- reseau2.afficher();
- System.out.println();
- System.out.println("----- Équipement 1 -----");
- routeur.afficher();
- System.out.println();
- System.out.println("----- Équipement 2 -----");
- serveur.afficher();
- }
-    
+
+    public static void main(String[] args) {
+
+        InfrastructureReseau infra =
+                new InfrastructureReseau("Infrastructure YFY");
+
+        ReseauIP r1 = new ReseauIP("192.168.1.0", 24, "Admin");
+        ReseauIP r2 = new ReseauIP("192.168.2.0", 24, "Tech");
+        ReseauIP r3 = new ReseauIP("192.168.3.0", 24, "WiFi");
+
+        infra.ajouterSousReseau(new SousReseau("ADMIN", r1));
+        infra.ajouterSousReseau(new SousReseau("TECH", r2));
+        infra.ajouterSousReseau(new SousReseau("WIFI", r3));
+
+        AdresseIP ip1 = new AdresseIP("192.168.1.1");
+        AdresseIP ip2 = new AdresseIP("10.0.0.1");
+
+        InterfaceReseau i1 = new InterfaceReseau("eth0", ip1);
+        InterfaceReseau i2 = new InterfaceReseau("eth1", ip2);
+
+        i1.activer();
+        i2.activer();
+
+        Equipement router = new Equipement("R1_EDGE", "Routeur");
+
+        router.ajouterInterface(i1);
+        router.ajouterInterface(i2);
+
+        infra.ajouterEquipement(router);
+
+        infra.afficher();
+
+        System.out.println("\nRecherche :");
+        infra.rechercherEquipement("R1_EDGE");
+    }
 }
